@@ -47,7 +47,7 @@ pub fn day3_level1(s: &str) {
                                 .filter_map(|sussy_idx| {
                                     (0..num_cols as isize)
                                         .contains(&sussy_idx)
-                                        .then(|| sussy_idx as usize)
+                                        .then_some(sussy_idx as usize)
                                 }),
                         );
 
