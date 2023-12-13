@@ -1,4 +1,4 @@
-pub fn day1_level1(input: &str) {
+pub fn level1(input: &str) {
     let answer: u32 = input
         .lines()
         .map(|line| {
@@ -21,7 +21,7 @@ pub fn day1_level1(input: &str) {
     println!("{answer}");
 }
 
-pub fn day1_level2(input: &str) {
+pub fn level2(input: &str) {
     let numbers = [
         "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "0", "1",
         "2", "3", "4", "5", "6", "7", "8", "9", "0",

@@ -4,7 +4,7 @@ fn is_symbol(c: u8) -> bool {
     c != b'.' && !(c as char).is_ascii_digit()
 }
 
-pub fn day3_level1(s: &str) {
+pub fn level1(s: &str) {
     let num_cols = s.find('\n').unwrap_or(0);
     let answer: usize = s
         .lines()
@@ -77,7 +77,7 @@ pub fn day3_level1(s: &str) {
     println!("{answer}");
 }
 
-pub fn day3_level2(s: &str) {
+pub fn level2(s: &str) {
     let num_cols = s.find('\n').unwrap_or(0);
     // key: coord, value: (count, product of parts that encountered it)
     let mut hashmapuh = HashMap::<usize, (usize, usize)>::new();

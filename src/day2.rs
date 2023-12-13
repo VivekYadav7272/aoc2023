@@ -51,7 +51,7 @@ impl FromStr for Game {
     }
 }
 
-pub fn day2_level1(input: &str) {
+pub fn level1(input: &str) {
     let (max_red_cubes, max_green_cubes, max_blue_cubes) = (12, 13, 14);
 
     let answer: u32 = input
@@ -74,7 +74,7 @@ pub fn day2_level1(input: &str) {
     println!("{answer}");
 }
 
-pub fn day2_level2(input: &str) {
+pub fn level2(input: &str) {
     let answer: u64 = input
         .lines()
         .map(|line| {
