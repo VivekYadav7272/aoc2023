@@ -9,13 +9,13 @@ pub fn day3_level1(s: &str) {
     let answer: usize = s
         .lines()
         .enumerate()
-        .map(|(row, line)| {
+        .flat_map(|(row, line)| {
             let mut num = None;
             line.chars()
                 // Dummy char to flush the last number if it remains
                 .chain(std::iter::once('.'))
                 .enumerate()
-                .map(|(curr_col, c)| {
+                .map(move |(curr_col, c)| {
                     if c.is_ascii_digit() {
                         num = num.or(Some(curr_col));
                     } else if let Some(start_col) = num {
@@ -72,7 +72,6 @@ pub fn day3_level1(s: &str) {
                     }
                     0
                 })
-                .sum::<usize>()
         })
         .sum::<usize>();
     println!("{answer}");
