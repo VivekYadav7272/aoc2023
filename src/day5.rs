@@ -21,10 +21,11 @@ impl Map {
             .src_dest_map
             .partition_point(|(src, _)| src.start <= key)
             .wrapping_sub(1);
+
         self.src_dest_map
             .get(ind)
             .and_then(|(src, dest)| (key <= src.end).then_some(dest.start + (key - src.start)))
-            .unwrap_or(key) // For the case where 0 - 1 == wraps away
+            .unwrap_or(key)
     }
 }
 
