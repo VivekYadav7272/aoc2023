@@ -106,7 +106,7 @@ fn do_it_in_parallel(works: Vec<impl Iterator<Item = usize> + Send>) -> usize {
     thread::scope(|scope| {
         // VERY IMP! Tricky tricky bug!
         // If you think you're being smart by not collecting the join handles,
-        // (i.e saving memory for a vector), you're doing an even bigger sin!
+        // (i.e saving memory on a vector), you're doing an even bigger sin!
         // Rust iterators are lazy, meaning without .collect(), .map(|_| {..})
         // isn't even spawning the thread!
         // After that, when each join_handle is joined, THEN, the thread is actually spawned,
