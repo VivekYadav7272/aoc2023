@@ -2,9 +2,10 @@ mod day1;
 mod day2;
 mod day3;
 mod day4;
+mod day5;
 mod utils;
 
 fn main() {
-    // std::fs::write("day4.txt", utils::fetch_problem(4).as_bytes()).expect("couldn't write to file");
-    day4::level2(include_str!("../day4.txt"));
+    // std::fs::write("day5.txt", utils::fetch_problem(5).as_bytes()).expect("couldn't write to file");
+    day5::level1(include_str!("../day5.txt"));
 }
