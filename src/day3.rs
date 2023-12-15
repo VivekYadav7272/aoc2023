@@ -4,10 +4,10 @@ fn is_symbol(c: u8) -> bool {
     c != b'.' && !(c as char).is_ascii_digit()
 }
 
-pub fn level1(s: &str) {
+pub fn level1(s: &str) -> usize {
     let num_cols = s.find('\n').unwrap_or(0);
-    let answer: usize = s
-        .lines()
+
+    s.lines()
         .enumerate()
         .flat_map(|(row, line)| {
             let mut num = None;
@@ -73,14 +73,14 @@ pub fn level1(s: &str) {
                     0
                 })
         })
-        .sum::<usize>();
-    println!("{answer}");
+        .sum()
 }
 
-pub fn level2(s: &str) {
+pub fn level2(s: &str) -> usize {
     let num_cols = s.find('\n').unwrap_or(0);
     // key: coord, value: (count, product of parts that encountered it)
     let mut hashmapuh = HashMap::<usize, (usize, usize)>::new();
+
     s.lines().enumerate().for_each(|(row, line)| {
         let mut num = None;
         line.chars()
@@ -154,10 +154,8 @@ pub fn level2(s: &str) {
 
     // By this time, all *'s have got their popularity scores set in.
 
-    let answer: usize = hashmapuh
+    hashmapuh
         .values()
         .filter_map(|&(count, product)| (count == 2).then_some(product))
-        .sum();
-
-    println!("{answer}");
+        .sum()
 }

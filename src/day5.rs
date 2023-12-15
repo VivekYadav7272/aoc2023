@@ -29,15 +29,8 @@ impl Map {
     }
 }
 
-pub fn level1(s: &str) {
-    let (seeds, rest) = s.split_once("\n\n").unwrap();
-    let seeds = seeds
-        .strip_prefix("seeds: ")
-        .unwrap()
-        .split_whitespace()
-        .map(|seed| seed.parse::<usize>().unwrap());
-
-    let maps: Vec<Map> = rest
+fn parse_maps(s: &str) -> Vec<Map> {
+    s.trim()
         .split("\n\n")
         .map(|map_str| {
             Map::from_categories(
@@ -58,14 +51,45 @@ pub fn level1(s: &str) {
                     .collect(),
             )
         })
-        .collect();
+        .collect()
+}
 
-    let answer = seeds
+pub fn level1(s: &str) -> usize {
+    let (seeds, rest) = s.split_once("\n\n").unwrap();
+    let seeds = seeds
+        .strip_prefix("seeds: ")
+        .unwrap()
+        .split_whitespace()
+        .map(|seed| seed.parse::<usize>().unwrap());
+
+    let maps: Vec<Map> = parse_maps(rest);
+
+    seeds
         .inspect(|seed| println!("Working for {seed}..."))
         .map(|seed| maps.iter().fold(seed, |curr_seed, map| map.get(curr_seed)))
         .inspect(|location| println!("We got the location {location}.\n"))
         .min()
-        .unwrap();
+        .unwrap()
+}
 
-    println!("{answer}");
+pub fn level2(s: &str) -> usize {
+    let (seeds, rest) = s.split_once("\n\n").unwrap();
+    let seeds: Vec<usize> = seeds
+        .strip_prefix("seeds:")
+        .unwrap()
+        .split_whitespace()
+        .map(|seed| seed.parse::<usize>().unwrap())
+        .collect();
+
+    let maps = parse_maps(rest);
+
+    seeds
+        .chunks_exact(2)
+        .flat_map(|range| {
+            let (len, range_start) = (range[1], range[0]);
+            let seeds = range_start..range_start + len;
+            seeds.map(|seed| maps.iter().fold(seed, |curr_seed, map| map.get(curr_seed)))
+        })
+        .min()
+        .unwrap()
 }

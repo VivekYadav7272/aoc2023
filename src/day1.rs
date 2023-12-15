@@ -1,5 +1,5 @@
-pub fn level1(input: &str) {
-    let answer: u32 = input
+pub fn level1(input: &str) -> usize {
+    input
         .lines()
         .map(|line| {
             let first_digit = line
@@ -17,17 +17,16 @@ pub fn level1(input: &str) {
 
             first_digit * 10 + last_digit
         })
-        .sum();
-    println!("{answer}");
+        .sum::<u32>() as usize
 }
 
-pub fn level2(input: &str) {
+pub fn level2(input: &str) -> usize {
     let numbers = [
         "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "0", "1",
         "2", "3", "4", "5", "6", "7", "8", "9", "0",
     ];
 
-    let answer: u32 = input
+    input
         .lines()
         .map(|line| {
             let first_num = numbers
@@ -45,9 +44,7 @@ pub fn level2(input: &str) {
 
             first_num * 10 + last_num
         })
-        .sum();
-
-    println!("{answer}");
+        .sum::<u32>() as usize
 }
 
 fn name2num(name: &str) -> u32 {

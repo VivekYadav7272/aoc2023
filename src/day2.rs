@@ -51,10 +51,10 @@ impl FromStr for Game {
     }
 }
 
-pub fn level1(input: &str) {
+pub fn level1(input: &str) -> usize {
     let (max_red_cubes, max_green_cubes, max_blue_cubes) = (12, 13, 14);
 
-    let answer: u32 = input
+    input
         .lines()
         .map(|line| {
             let game = line.parse::<Game>().expect("Line must be a valid game");
@@ -69,13 +69,11 @@ pub fn level1(input: &str) {
             }
             game.game_no as u32
         })
-        .sum();
-
-    println!("{answer}");
+        .sum::<u32>() as usize
 }
 
-pub fn level2(input: &str) {
-    let answer: u64 = input
+pub fn level2(input: &str) -> usize {
+    input
         .lines()
         .map(|line| {
             let game = line.parse::<Game>().expect("Line should be a valid Game");
@@ -100,7 +98,5 @@ pub fn level2(input: &str) {
 
             min_red_cubes as u64 * min_green_cubes as u64 * min_blue_cubes as u64
         })
-        .sum();
-
-    println!("{answer}");
+        .sum::<u64>() as usize
 }

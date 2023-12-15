@@ -1,6 +1,5 @@
-pub fn level1(s: &str) {
-    let answer = s
-        .lines()
+pub fn level1(s: &str) -> usize {
+    s.lines()
         .map(|line| {
             let (_card_id, rest) = line.split_once(':').expect("colon must be present");
             let (winning_nos, my_nos) = rest.split_once('|').expect("| must be present");
@@ -23,13 +22,11 @@ pub fn level1(s: &str) {
                 1usize << (matches - 1)
             }
         })
-        .sum::<usize>();
-
-    println!("{answer}");
+        .sum()
 }
 
 // this is a DP question, but we ain't memoisin'
-pub fn level2(s: &str) {
+pub fn level2(s: &str) -> usize {
     let card_winnings: Vec<usize> = s
         .lines()
         .map(|line| {
@@ -56,7 +53,7 @@ pub fn level2(s: &str) {
     (0..card_winnings.len())
         .for_each(|card| inc_child(card, &mut total_cards_owned, &card_winnings));
 
-    println!("{total_cards_owned}");
+    total_cards_owned
 }
 
 fn inc_child(card_id: usize, total_cards_owned: &mut usize, card_winnings: &Vec<usize>) {
