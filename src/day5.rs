@@ -1,4 +1,4 @@
-use std::ops::Range;
+use std::{num::NonZeroUsize, ops::Range};
 
 #[derive(Debug)]
 struct Map {
@@ -20,7 +20,7 @@ impl Map {
         let ind = self
             .src_dest_map
             .partition_point(|(src, _)| src.start <= key)
-            .wrapping_sub(1);
+            - 1;
 
         self.src_dest_map
             .get(ind)
@@ -83,13 +83,44 @@ pub fn level2(s: &str) -> usize {
 
     let maps = parse_maps(rest);
 
-    seeds
+    // Time to break out threads babyyyy, independent work, easily done parallely 😌
+    // I could use rayon, but first I wanna do it myself.
+
+    let work = seeds
         .chunks_exact(2)
-        .flat_map(|range| {
+        .map(|range| {
             let (len, range_start) = (range[1], range[0]);
             let seeds = range_start..range_start + len;
             seeds.map(|seed| maps.iter().fold(seed, |curr_seed, map| map.get(curr_seed)))
         })
-        .min()
-        .unwrap()
+        .collect();
+
+    println!("{work:?}");
+
+    do_it_in_parallel(work)
+}
+
+fn do_it_in_parallel(works: Vec<impl Iterator<Item = usize> + Send>) -> usize {
+    use std::thread;
+
+    thread::scope(|scope| {
+        // VERY IMP! Tricky tricky bug!
+        // If you think you're being smart by not collecting the join handles,
+        // (i.e saving memory for a vector), you're doing an even bigger sin!
+        // Rust iterators are lazy, meaning without .collect(), .map(|_| {..})
+        // isn't even spawning the thread!
+        // After that, when each join_handle is joined, THEN, the thread is actually spawned,
+        // and does its work, one-by-one :(
+
+        let join_handles: Vec<thread::ScopedJoinHandle<usize>> = works
+            .into_iter()
+            .map(|work| scope.spawn(|| work.min().unwrap()))
+            .collect();
+
+        join_handles
+            .into_iter()
+            .map(|join_handle| join_handle.join().unwrap())
+            .min()
+            .unwrap()
+    })
 }

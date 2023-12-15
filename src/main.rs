@@ -7,5 +7,5 @@ mod utils;
 
 fn main() {
     // std::fs::write("day5.txt", utils::fetch_problem(5).as_bytes()).expect("couldn't write to file");
-    dbg!(day5::level1(include_str!("../day5.txt")));
+    dbg!(day5::level2(include_str!("../day5.txt")));
 }
