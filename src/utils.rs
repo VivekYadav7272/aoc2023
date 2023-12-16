@@ -1,4 +1,4 @@
-use std::process::Command;
+use std::{fmt::Debug, process::Command, str::FromStr};
 
 const COOKIE: &str = include_str!("../.env");
 
@@ -16,4 +16,11 @@ pub fn fetch_problem(day: u8) -> String {
             .as_slice(),
     )
     .to_string()
+}
+
+pub fn parse_stuff<T: FromStr>(s: &str) -> impl Iterator<Item = T> + '_
+where
+    <T as FromStr>::Err: Debug,
+{
+    s.split_whitespace().map(|x| x.parse::<T>().unwrap())
 }

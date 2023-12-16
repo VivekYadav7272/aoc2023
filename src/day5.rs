@@ -1,5 +1,7 @@
 use std::{num::NonZeroUsize, ops::Range};
 
+use crate::utils::parse_stuff;
+
 #[derive(Debug)]
 struct Map {
     src_dest_map: Vec<(Range<usize>, Range<usize>)>,
@@ -56,11 +58,7 @@ fn parse_maps(s: &str) -> Vec<Map> {
 
 pub fn level1(s: &str) -> usize {
     let (seeds, rest) = s.split_once("\n\n").unwrap();
-    let seeds = seeds
-        .strip_prefix("seeds: ")
-        .unwrap()
-        .split_whitespace()
-        .map(|seed| seed.parse::<usize>().unwrap());
+    let seeds = parse_stuff::<usize>(seeds.strip_prefix("seeds: ").unwrap());
 
     let maps: Vec<Map> = parse_maps(rest);
 
@@ -74,12 +72,7 @@ pub fn level1(s: &str) -> usize {
 
 pub fn level2(s: &str) -> usize {
     let (seeds, rest) = s.split_once("\n\n").unwrap();
-    let seeds: Vec<usize> = seeds
-        .strip_prefix("seeds:")
-        .unwrap()
-        .split_whitespace()
-        .map(|seed| seed.parse::<usize>().unwrap())
-        .collect();
+    let seeds: Vec<usize> = parse_stuff(seeds.strip_prefix("seeds:").unwrap()).collect();
 
     let maps = parse_maps(rest);
 
