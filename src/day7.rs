@@ -116,7 +116,7 @@ impl Hand {
             return Self {
                 hand_type: HandType::FiveKind,
                 bid,
-                hand: hand.replace('?', power2card(13)),
+                hand: hand.to_string(),
             };
         }
 
