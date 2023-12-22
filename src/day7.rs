@@ -223,7 +223,7 @@ pub fn level2(s: &str) -> usize {
         .collect();
 
     // println!("Before sorting: \n{hands:?}");
-    hands.sort();
+    hands.sort_unstable();
     // println!("After sorting: \n{hands:?}");
 
     hands
