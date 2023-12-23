@@ -18,7 +18,7 @@ pub fn fetch_problem(day: u8) -> String {
     .to_string()
 }
 
-pub fn parse_stuff<T: FromStr>(s: &str) -> impl Iterator<Item = T> + '_
+pub fn parse_stuff<T: FromStr>(s: &str) -> impl Iterator<Item = T> + '_ + Clone
 where
     <T as FromStr>::Err: Debug,
 {
