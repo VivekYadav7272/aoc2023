@@ -1,4 +1,5 @@
 mod day1;
+mod day10;
 mod day2;
 mod day3;
 mod day4;
@@ -10,6 +11,17 @@ mod day9;
 mod utils;
 
 fn main() {
-    // std::fs::write("day9.txt", utils::fetch_problem(9).as_bytes()).expect("couldn't write to file");
-    dbg!(day9::level2(include_str!("../day9.txt")));
+    use day10 as curr_day;
+    use std::fs;
+    const CURR_DAY: u8 = 10;
+
+    fs::write(
+        format!("day{CURR_DAY}.txt"),
+        utils::fetch_problem(CURR_DAY).as_bytes(),
+    )
+    .expect("couldn't write to file");
+
+    dbg!(curr_day::level1(
+        &fs::read_to_string(format!("../day{CURR_DAY}.txt")).expect("couldn't open input file")
+    ));
 }
