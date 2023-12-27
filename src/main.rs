@@ -15,13 +15,13 @@ fn main() {
     use std::fs;
     const CURR_DAY: u8 = 10;
 
-    fs::write(
-        format!("day{CURR_DAY}.txt"),
-        utils::fetch_problem(CURR_DAY).as_bytes(),
-    )
-    .expect("couldn't write to file");
+    // fs::write(
+    //     format!("day{CURR_DAY}.txt"),
+    //     utils::fetch_problem(CURR_DAY).as_bytes(),
+    // )
+    // .expect("couldn't write to file");
 
     dbg!(curr_day::level1(
-        &fs::read_to_string(format!("../day{CURR_DAY}.txt")).expect("couldn't open input file")
+        &fs::read_to_string(format!("day{CURR_DAY}.txt")).expect("couldn't open input file")
     ));
 }
