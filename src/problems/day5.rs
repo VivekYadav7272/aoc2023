@@ -1,6 +1,6 @@
-use std::{num::NonZeroUsize, ops::Range};
-
+use super::Problem;
 use crate::utils::parse_stuff;
+use std::ops::Range;
 
 #[derive(Debug)]
 struct Map {
@@ -56,43 +56,47 @@ fn parse_maps(s: &str) -> Vec<Map> {
         .collect()
 }
 
-pub fn level1(s: &str) -> usize {
-    let (seeds, rest) = s.split_once("\n\n").unwrap();
-    let seeds = parse_stuff::<usize>(seeds.strip_prefix("seeds: ").unwrap());
+pub struct Day5;
+impl Problem for Day5 {
+    const PROBLEM_DAY: u32 = 5;
 
-    let maps: Vec<Map> = parse_maps(rest);
+    fn level1(s: &str) -> usize {
+        let (seeds, rest) = s.split_once("\n\n").unwrap();
+        let seeds = parse_stuff::<usize>(seeds.strip_prefix("seeds: ").unwrap());
 
-    seeds
-        .inspect(|seed| println!("Working for {seed}..."))
-        .map(|seed| maps.iter().fold(seed, |curr_seed, map| map.get(curr_seed)))
-        .inspect(|location| println!("We got the location {location}.\n"))
-        .min()
-        .unwrap()
+        let maps: Vec<Map> = parse_maps(rest);
+
+        seeds
+            .inspect(|seed| println!("Working for {seed}..."))
+            .map(|seed| maps.iter().fold(seed, |curr_seed, map| map.get(curr_seed)))
+            .inspect(|location| println!("We got the location {location}.\n"))
+            .min()
+            .unwrap()
+    }
+
+    fn level2(s: &str) -> usize {
+        let (seeds, rest) = s.split_once("\n\n").unwrap();
+        let seeds: Vec<usize> = parse_stuff(seeds.strip_prefix("seeds:").unwrap()).collect();
+
+        let maps = parse_maps(rest);
+
+        // Time to break out threads babyyyy, independent work, easily done parallely 😌
+        // I could use rayon, but first I wanna do it myself.
+
+        let work = seeds
+            .chunks_exact(2)
+            .map(|range| {
+                let (len, range_start) = (range[1], range[0]);
+                let seeds = range_start..range_start + len;
+                seeds.map(|seed| maps.iter().fold(seed, |curr_seed, map| map.get(curr_seed)))
+            })
+            .collect();
+
+        println!("{work:?}");
+
+        do_it_in_parallel(work)
+    }
 }
-
-pub fn level2(s: &str) -> usize {
-    let (seeds, rest) = s.split_once("\n\n").unwrap();
-    let seeds: Vec<usize> = parse_stuff(seeds.strip_prefix("seeds:").unwrap()).collect();
-
-    let maps = parse_maps(rest);
-
-    // Time to break out threads babyyyy, independent work, easily done parallely 😌
-    // I could use rayon, but first I wanna do it myself.
-
-    let work = seeds
-        .chunks_exact(2)
-        .map(|range| {
-            let (len, range_start) = (range[1], range[0]);
-            let seeds = range_start..range_start + len;
-            seeds.map(|seed| maps.iter().fold(seed, |curr_seed, map| map.get(curr_seed)))
-        })
-        .collect();
-
-    println!("{work:?}");
-
-    do_it_in_parallel(work)
-}
-
 fn do_it_in_parallel(works: Vec<impl Iterator<Item = usize> + Send>) -> usize {
     use std::thread;
 

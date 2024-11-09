@@ -1,5 +1,7 @@
 use std::cmp::Ordering;
 
+use super::Problem;
+
 #[derive(Clone, Copy, Debug)]
 enum HandType {
     FiveKind = 6,
@@ -179,56 +181,61 @@ fn power2card(pow: usize) -> &'static str {
     &"?23456789TJQKA"[pow..pow + 1]
 }
 
-pub fn level1(s: &str) -> usize {
-    let mut hands: Vec<Hand> = s
-        .lines()
-        .map(|line| {
-            let (hand, bid) = line.split_once(' ').unwrap();
-            let bid = bid.parse::<usize>().unwrap();
-            Hand::from(hand, bid)
-        })
-        .collect();
+pub struct Day7;
+impl Problem for Day7 {
+    const PROBLEM_DAY: u32 = 7;
 
-    // println!("Before sorting: \n{hands:?}");
-    hands.sort_unstable();
-    // println!("After sorting: \n{hands:?}");
+    fn level1(s: &str) -> usize {
+        let mut hands: Vec<Hand> = s
+            .lines()
+            .map(|line| {
+                let (hand, bid) = line.split_once(' ').unwrap();
+                let bid = bid.parse::<usize>().unwrap();
+                Hand::from(hand, bid)
+            })
+            .collect();
 
-    hands
-        .into_iter()
-        .enumerate()
-        .map(|(i, hand)| (i + 1) * hand.bid)
-        .sum()
-}
+        // println!("Before sorting: \n{hands:?}");
+        hands.sort_unstable();
+        // println!("After sorting: \n{hands:?}");
 
-// By far, the MOST annoying level2!!! They changed the rules of how the architecture is setup!
-// Now, there needs to be a separate card_power function for the second level.
-// Aand, there needs to be a different Hand::from_level2(..)
-// UNLESS, I apply a hack:
-// In level2, I parse out all 'J's, and replace them with '?'.
-// Now, we can treat handle '?' in all the old functions as if it were a part of the equation from the start.
-// Shouldn't be a problem.
-// Oh and also we're lucky here we use the value of card_power as an ordinal instead of a cardinal,
-// otherwise shifting up every number to accomodate '?' would've resulted in problems.
+        hands
+            .into_iter()
+            .enumerate()
+            .map(|(i, hand)| (i + 1) * hand.bid)
+            .sum()
+    }
 
-pub fn level2(s: &str) -> usize {
-    let mut hands: Vec<Hand> = s
-        .lines()
-        .map(|line| {
-            let (hand, bid) = line.split_once(' ').unwrap();
-            let bid = bid.parse::<usize>().unwrap();
-            let ret = Hand::from(&hand.replace('J', "?"), bid);
-            println!("Converted from {hand} to {}", ret.hand);
-            ret
-        })
-        .collect();
+    // By far, the MOST annoying level2!!! They changed the rules of how the architecture is setup!
+    // Now, there needs to be a separate card_power function for the second level.
+    // Aand, there needs to be a different Hand::from_level2(..)
+    // UNLESS, I apply a hack:
+    // In level2, I parse out all 'J's, and replace them with '?'.
+    // Now, we can treat handle '?' in all the old functions as if it were a part of the equation from the start.
+    // Shouldn't be a problem.
+    // Oh and also we're lucky here we use the value of card_power as an ordinal instead of a cardinal,
+    // otherwise shifting up every number to accomodate '?' would've resulted in problems.
 
-    // println!("Before sorting: \n{hands:?}");
-    hands.sort_unstable();
-    // println!("After sorting: \n{hands:?}");
+    fn level2(s: &str) -> usize {
+        let mut hands: Vec<Hand> = s
+            .lines()
+            .map(|line| {
+                let (hand, bid) = line.split_once(' ').unwrap();
+                let bid = bid.parse::<usize>().unwrap();
+                let ret = Hand::from(&hand.replace('J', "?"), bid);
+                println!("Converted from {hand} to {}", ret.hand);
+                ret
+            })
+            .collect();
 
-    hands
-        .into_iter()
-        .enumerate()
-        .map(|(i, hand)| (i + 1) * hand.bid)
-        .sum()
+        // println!("Before sorting: \n{hands:?}");
+        hands.sort_unstable();
+        // println!("After sorting: \n{hands:?}");
+
+        hands
+            .into_iter()
+            .enumerate()
+            .map(|(i, hand)| (i + 1) * hand.bid)
+            .sum()
+    }
 }

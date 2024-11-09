@@ -1,12 +1,28 @@
 use crate::utils::parse_stuff;
 
-pub fn level1(s: &str) -> usize {
-    s.lines()
-        .map(|line| {
-            let nums: Vec<i32> = parse_stuff(line).collect();
-            calculate_prediction_level1(nums)
-        })
-        .sum::<i32>() as usize
+use super::Problem;
+
+pub struct Day9;
+impl Problem for Day9 {
+    const PROBLEM_DAY: u32 = 9;
+
+    fn level1(s: &str) -> usize {
+        s.lines()
+            .map(|line| {
+                let nums: Vec<i32> = parse_stuff(line).collect();
+                calculate_prediction_level1(nums)
+            })
+            .sum::<i32>() as usize
+    }
+
+    fn level2(s: &str) -> usize {
+        s.lines()
+            .map(|line| {
+                let nums: Vec<i32> = parse_stuff(line).collect();
+                calculate_prediction_level2(nums)
+            })
+            .sum::<i32>() as usize
+    }
 }
 
 fn calculate_prediction_level1(nums: Vec<i32>) -> i32 {
@@ -19,15 +35,6 @@ fn calculate_prediction_level1(nums: Vec<i32>) -> i32 {
     nums.last()
         .expect("the `if` condn traps the zero elem case")
         + next_pred
-}
-
-pub fn level2(s: &str) -> usize {
-    s.lines()
-        .map(|line| {
-            let nums: Vec<i32> = parse_stuff(line).collect();
-            calculate_prediction_level2(nums)
-        })
-        .sum::<i32>() as usize
 }
 
 fn calculate_prediction_level2(nums: Vec<i32>) -> i32 {

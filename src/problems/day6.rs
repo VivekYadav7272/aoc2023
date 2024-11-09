@@ -1,5 +1,7 @@
 use crate::utils::parse_stuff;
 
+use super::Problem;
+
 fn margin_of_error(t_thres: usize, d: usize) -> usize {
     // eqn for time taken is: t(t_btn, d) = t_btn + d/t_btn (cuz t_btn is now velocity,
     // so don't think d/t == velocity here, it's d/v == time)
@@ -33,35 +35,40 @@ fn margin_of_error(t_thres: usize, d: usize) -> usize {
     (t_btn_max - t_btn_min + 1f64) as usize
 }
 
-pub fn level1(s: &str) -> usize {
-    let (min_time, fastest_dist) = s.split_once('\n').unwrap();
-    let min_time = parse_stuff::<usize>(min_time.strip_prefix("Time:").unwrap());
+pub struct Day6;
+impl Problem for Day6 {
+    const PROBLEM_DAY: u32 = 6;
 
-    let fastest_dist = parse_stuff::<usize>(fastest_dist.strip_prefix("Distance:").unwrap());
+    fn level1(s: &str) -> usize {
+        let (min_time, fastest_dist) = s.split_once('\n').unwrap();
+        let min_time = parse_stuff::<usize>(min_time.strip_prefix("Time:").unwrap());
 
-    min_time
-        .zip(fastest_dist)
-        .map(|(t_thres, d)| margin_of_error(t_thres, d))
-        .product()
-}
+        let fastest_dist = parse_stuff::<usize>(fastest_dist.strip_prefix("Distance:").unwrap());
 
-pub fn level2(s: &str) -> usize {
-    let (min_time, fastest_dist) = s.split_once('\n').unwrap();
-    let min_time = min_time
-        .strip_prefix("Time:")
-        .unwrap()
-        .split_whitespace()
-        .collect::<String>()
-        .parse::<usize>()
-        .unwrap();
+        min_time
+            .zip(fastest_dist)
+            .map(|(t_thres, d)| margin_of_error(t_thres, d))
+            .product()
+    }
 
-    let fastest_dist = fastest_dist
-        .strip_prefix("Distance:")
-        .unwrap()
-        .split_whitespace()
-        .collect::<String>()
-        .parse::<usize>()
-        .unwrap();
+    fn level2(s: &str) -> usize {
+        let (min_time, fastest_dist) = s.split_once('\n').unwrap();
+        let min_time = min_time
+            .strip_prefix("Time:")
+            .unwrap()
+            .split_whitespace()
+            .collect::<String>()
+            .parse::<usize>()
+            .unwrap();
 
-    margin_of_error(min_time, fastest_dist)
+        let fastest_dist = fastest_dist
+            .strip_prefix("Distance:")
+            .unwrap()
+            .split_whitespace()
+            .collect::<String>()
+            .parse::<usize>()
+            .unwrap();
+
+        margin_of_error(min_time, fastest_dist)
+    }
 }
